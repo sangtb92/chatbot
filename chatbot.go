@@ -148,8 +148,8 @@ func sendTextMessage(senderID string, text string) {
 	if err != nil {
 		log.Print(err)
 	}
-	fmt.Println("%T", req)
-	fmt.Println("%T", err)
+	fmt.Println("%T1", req)
+	fmt.Println("%T2", err)
 
 	values := url.Values{}
 	values.Add("access_token", accessToken)
