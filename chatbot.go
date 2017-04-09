@@ -5,13 +5,13 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/gorilla/mux"
-	"fmt"
-	"os"
-	"io/ioutil"
-	"encoding/json"
 	"bytes"
+	"encoding/json"
+	"fmt"
+	"github.com/gorilla/mux"
+	"io/ioutil"
 	"net/url"
+	"os"
 	"strings"
 	"time"
 )
@@ -93,12 +93,12 @@ func main() {
 
 }
 
-func webhookHandler(w http.ResponseWriter, r *http.Request) {
+func webhookHandler1(w http.ResponseWriter, r *http.Request) {
 	if r.Method == "GET" {
 		verifyTokenAction(w, r)
 	}
 	if r.Method == "POST" {
-		webhookPostAction(w, r) 
+		webhookPostAction(w, r)
 	}
 }
 func webhookPostAction(w http.ResponseWriter, r *http.Request) {
@@ -172,12 +172,12 @@ func sendTextMessage(senderID string, text string) {
 	log.Print(result)
 }
 
-func verifyTokenAction (w http.ResponseWriter, req *http.Request){
-	mode		:= "subscribe"
+func verifyTokenAction(w http.ResponseWriter, req *http.Request) {
+	mode := "subscribe"
 
-	hubMode		:= req.URL.Query().Get("hub.mode")
-	hubVerifyToken 	:= req.URL.Query().Get("hub.verify_token")
-	challenge	:= req.URL.Query().Get("hub.challenge")
+	hubMode := req.URL.Query().Get("hub.mode")
+	hubVerifyToken := req.URL.Query().Get("hub.verify_token")
+	challenge := req.URL.Query().Get("hub.challenge")
 
 	if hubMode == mode && hubVerifyToken == "sang_2201" {
 		fmt.Println("Validating webhook")

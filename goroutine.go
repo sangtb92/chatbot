@@ -2,8 +2,8 @@ package main
 
 import (
 	"fmt"
-	"time"
 	"strconv"
+	"time"
 )
 
 func pinger(c chan string) {
@@ -13,12 +13,12 @@ func pinger(c chan string) {
 }
 
 func ponger(c chan string) {
-	for i := 0; ;i++  {
+	for i := 0; ; i++ {
 		c <- "pong" + strconv.Itoa(i)
 	}
 }
 
-func printer (c chan string)  {
+func printer(c chan string) {
 	for {
 		msg := <-c
 		fmt.Println(msg)
@@ -27,7 +27,7 @@ func printer (c chan string)  {
 }
 
 func main() {
-	var c chan string  = make(chan string)
+	var c chan string = make(chan string)
 	go pinger(c)
 	go ponger(c)
 	go printer(c)
