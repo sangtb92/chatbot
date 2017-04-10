@@ -4,6 +4,11 @@ import (
 	"github.com/abhinavdahiya/go-messenger-bot"
 	"log"
 	"net/http"
+	"github.com/dyatlov/gostardict/stardict"
+	//"github.com/derekparker/delve/pkg/dwarf/reader"
+	//"fmt"
+	"fmt"
+	"strings"
 )
 
 const (
@@ -17,9 +22,39 @@ func main() {
 	callbacks, mux := bot.SetWebhook("/webhook")
 	go http.ListenAndServe(":8080", mux)
 	for callback := range callbacks {
-		log.Printf("[%#v] %s", callback.Sender, callback.Message.Text)
+		if callback.IsMessage()  {
+			//log.Printf("[%#v] %s", callback.Sender, callback.Message.Text)
+			msg1 := goStartDict(callback.Message.Text)
+			//fmt.Println(msg1)
+			msg := mbotapi.NewMessage(msg1)
+			bot.Send(callback.Sender, msg, mbotapi.RegularNotif)
+		}
 
-		msg := mbotapi.NewMessage(callback.Message.Text)
-		bot.Send(callback.Sender, msg, mbotapi.RegularNotif)
+
 	}
+}
+
+func goStartDict(msg string) string {
+	var result string
+	// init dictionary with path to dictionary files and name of dictionary
+	dict, err := stardict.NewDictionary("/home/sangnd/Downloads/VietAnh/AnhViet", "star_anhviet")
+
+	if err != nil {
+		panic(err)
+	}
+	senses := dict.Translate(msg) // get translations
+	for i, sense := range senses {
+		log.Println("Sense", i)
+		for j, tran := range sense.Parts {
+			log.Println(j)
+			result += string(tran.Data)
+		}
+	}
+	fmt.Println(result)
+	rest := strings.Split(result, "*");
+	fmt.Println(len(rest))
+	for r := range rest {
+		fmt.Println(string(r))
+	}
+	return result
 }
